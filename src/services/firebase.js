@@ -1,12 +1,26 @@
+const firebase = require('firebase');
 const admin = require('firebase-admin');
 const config = require('../../config');
 
+const firebaseApp = firebase.initializeApp(config.firebaseConfig);
 admin.initializeApp({
     credential: admin.credential.cert(config.serviceAccountKey),
-    databaseURL: 'https://mytvguide-9f5ec.firebaseio.com',
+    databaseURL: config.serviceAccountKey.databaseURL,
 });
 
-const checkAuth = async (token) => {
+const checkWithEmailAndPassword = async (user, pass) => {
+    try {
+        if (user && pass) {
+            const firebaseAuth = await firebaseApp.auth().signInWithEmailAndPassword(user, pass);
+            return !!firebaseAuth.user.uid;
+        }
+        return false;
+    } catch (error) {
+        return false;
+    }
+};
+
+const checkAuthWithToken = async (token) => {
     try {
         if (token) {
             const decodedToken = await admin.auth().verifyIdToken(token);
@@ -19,5 +33,6 @@ const checkAuth = async (token) => {
 };
 
 module.exports = {
-    checkAuth,
+    checkAuthWithToken,
+    checkWithEmailAndPassword,
 };

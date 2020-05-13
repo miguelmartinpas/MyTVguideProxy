@@ -2,7 +2,7 @@
 const express = require('express');
 const ExpressCache = require('express-cache-middleware');
 const cacheManager = require('cache-manager');
-const { checkAuth } = require('./services/firebase');
+const { checkAuthWithToken, checkWithEmailAndPassword } = require('./services/firebase');
 const broadcasting = require('./controllers/broadcasting');
 
 const PORT = process.env.PORT || 3000;
@@ -25,7 +25,13 @@ app.listen(PORT, () => {
 
 // mildeware to check auth
 app.use(async (req, res, next) => {
-    const isAuth = await checkAuth(req.headers.token);
+    let isAuth = false;
+    const { token, user, pass } = req.headers;
+    if (req.headers.token) {
+        isAuth = await checkAuthWithToken(token);
+    } else if (req.headers.user && req.headers.pass) {
+        isAuth = await checkWithEmailAndPassword(user, pass);
+    }
     if (!isAuth) {
         res.status(401).json({ status: 401, error: 'Unauthorized' });
     }

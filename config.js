@@ -1,3 +1,4 @@
+let firebaseConfig = require('./emptyFirebaseConfig.json');
 let serviceAccountKey = require('./emptyServiceAccountKey.json');
 
 serviceAccountKey = {
@@ -14,9 +15,21 @@ serviceAccountKey = {
     client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL || serviceAccountKey.client_x509_cert_url,
 };
 
+firebaseConfig = {
+    apiKey: process.env.FIREBASE_APIKEY || firebaseConfig.apiKey,
+    authDomain: process.env.FIREBASE_AUTHDOMAIN || firebaseConfig.authDomain,
+    databaseURL: process.env.FIREBASE_DATABASEURL || firebaseConfig.databaseURL,
+    projectId: process.env.FIREBASE_PROJECTID || firebaseConfig.projectId,
+    storageBucket: process.env.FIREBASE_STORAGEBUCKET || firebaseConfig.storageBucket,
+    messagingSenderId: process.env.FIREBASE_MESSAGINGSENDERID || firebaseConfig.messagingSenderId,
+    appId: process.env.FIREBASE_APPID || firebaseConfig.appId,
+};
+
 console.log('process.env', process.env);
+console.log('firebaseConfig', firebaseConfig);
 console.log('serviceAccountKey', serviceAccountKey);
 
 module.exports = {
+    firebaseConfig,
     serviceAccountKey,
 };
