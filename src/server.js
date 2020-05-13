@@ -2,14 +2,8 @@
 const express = require('express');
 const ExpressCache = require('express-cache-middleware');
 const cacheManager = require('cache-manager');
-
-var firebase = require('firebase');
-
-
-const config = require('../config');
+const { checkAuth } = require('./services/firebase');
 const broadcasting = require('./controllers/broadcasting');
-
-var firebase = firebase.initializeApp(config.firebaseConfig);
 
 const PORT = process.env.PORT || 3000;
 
@@ -21,7 +15,7 @@ const caching = cacheManager.caching({
 const cacheMiddleware = new ExpressCache(caching);
 
 const app = express();
-// cacheMiddleware.attach(app);
+cacheMiddleware.attach(app);
 
 app.listen(PORT, () => {
     /* eslint-disable no-console */
@@ -29,21 +23,16 @@ app.listen(PORT, () => {
     /* eslint-enable no-console */
 });
 
-app.use((req, res, next) => {
-  if (!req.query.token) {
-      res.status(401).json({ status: 401, error: 'Unauthorized'});
-  }
-  if (req.query.user && req.query.pass) {
-        firebase.auth().signInWithEmailAndPassword(req.query.user, req.query.pass)
-          .then(function(result) {
-              console.log('!!!!!!!!!!', result.user.uid);
-            // result.user.tenantId should be ‘TENANT_PROJECT_ID’.
-          }).catch(function(error) {
-            console.log('ERROR', error);
-          });
-  }
-  next();
+// mildeware to check auth
+app.use(async (req, res, next) => {
+    const isAuth = await checkAuth(req.query.token, req.query.user, req.query.pass);
+    if (!isAuth) {
+        res.status(401).json({ status: 401, error: 'Unauthorized' });
+    }
+    next();
 });
+
+// broadcasting
 
 app.get('/broadcasting', async (req, res) => {
     res.json(await broadcasting.index());
