@@ -1,4 +1,4 @@
-const serviceAccountKey = require('./serviceAccountKey.json');
+const serviceAccountKey = require('./xxx.json');
 
 module.exports = {
     serviceAccountKey,
