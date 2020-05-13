@@ -9,7 +9,10 @@ const DATE_FORMAT = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
 const fetchDate = async (day) => {
     const dateParsed = day.match(DATE_FORMAT);
     if (dateParsed) {
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve, reject) => {
+            /* eslint-disable no-console */
+            console.log(`call to ${BASE_URL}/${PATH}/${dateParsed[1]}?v=${VERSION}`);
+            /* eslint-enable no-console */
             fetch(`${BASE_URL}/${PATH}/${dateParsed[1]}?v=${VERSION}`)
                 .then((response) => response.json())
                 .then((data) => {
@@ -17,8 +20,8 @@ const fetchDate = async (day) => {
                 })
                 .catch((error) => {
                     reject(error);
-                })
-        );
+                });
+        });
     }
     throw new Error(`Error Incorrect format of date '${day}'. the correct forma is ${DATE_FORMAT}`);
 };

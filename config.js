@@ -25,10 +25,6 @@ firebaseConfig = {
     appId: process.env.FIREBASE_APPID || firebaseConfig.appId,
 };
 
-console.log('process.env', process.env);
-console.log('firebaseConfig', firebaseConfig);
-console.log('serviceAccountKey', serviceAccountKey);
-
 module.exports = {
     firebaseConfig,
     serviceAccountKey,
