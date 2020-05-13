@@ -25,7 +25,7 @@ app.listen(PORT, () => {
 
 // mildeware to check auth
 app.use(async (req, res, next) => {
-    const isAuth = await checkAuth(req.query.token, req.query.user, req.query.pass);
+    const isAuth = await checkAuth(req.headers.token);
     if (!isAuth) {
         res.status(401).json({ status: 401, error: 'Unauthorized' });
     }
@@ -33,11 +33,11 @@ app.use(async (req, res, next) => {
 });
 
 // broadcasting
-
+// index
 app.get('/broadcasting', async (req, res) => {
     res.json(await broadcasting.index());
 });
-
+// show(id)
 app.get('/broadcasting/:day', async (req, res) => {
     res.json(await broadcasting.show(req.params.day));
 });
