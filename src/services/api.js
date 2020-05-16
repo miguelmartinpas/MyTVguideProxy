@@ -1,40 +1,63 @@
 const fetch = require('node-fetch');
+const config = require('../../config');
+const stations = require('./stations.json');
+const { parser } = require('./Parser');
+const { firebase } = require('./Firebase');
 
-const BASE_URL = 'http://www.movistarplus.es';
-const PATH = 'programacion-tv';
-const VERSION = 'json';
+class Api {
+    constructor(url, path, query) {
+        this.url = url;
+        this.path = path;
+        this.query = query;
 
-const DATE_FORMAT = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
-
-const fetchDate = async (day) => {
-    const dateParsed = day.match(DATE_FORMAT);
-    if (dateParsed) {
-        return new Promise((resolve, reject) => {
-            /* eslint-disable no-console */
-            console.log(`call to ${BASE_URL}/${PATH}/${dateParsed[1]}?v=${VERSION}`);
-            /* eslint-enable no-console */
-            fetch(`${BASE_URL}/${PATH}/${dateParsed[1]}?v=${VERSION}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    resolve({ data: data.data, day: dateParsed[1] });
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        });
+        this.dateFormat = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
     }
-    throw new Error(`Error Incorrect format of date '${day}'. the correct forma is ${DATE_FORMAT}`);
-};
 
-const getCurrentDate = () => {
-    const date = new Date().toISOString().match(/(.*)T.*/);
-    return date[1];
-};
+    async fetchDate(day) {
+        const dateParsed = day.match(this.dateFormat);
+        if (dateParsed) {
+            const getProgramsforDay = await firebase.existsProgramsFor(day);
+            if (getProgramsforDay) {
+                /* eslint-disable no-console */
+                console.log(`call to Cloud Firestore ...`);
+                /* eslint-enable no-console */
+                const programsFromFirebase = await firebase.getProgramsFor(day);
+                firebase.purgeProgramsBeforeTo(day);
+                return { day: dateParsed[1], stations, programs: programsFromFirebase };
+            }
+            return new Promise((resolve, reject) => {
+                /* eslint-disable no-console */
+                console.log(`call to ${this.url}/${this.path}/${dateParsed[1]}${this.query} ...`);
+                /* eslint-enable no-console */
+                fetch(`${this.url}/${this.path}/${dateParsed[1]}${this.query}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        firebase.writePrograms(day, parser.parseDataToPrograms(data.data));
+                        resolve({ day: dateParsed[1], stations, programs: parser.parseDataToPrograms(data.data) });
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    });
+            });
+        }
+        throw new Error(`Error Incorrect format of date '${day}'. the correct forma is ${this.dateFormat}`);
+    }
 
-const fetchDateForCurrentDay = async () => fetchDate(getCurrentDate());
+    /* eslint-disable class-methods-use-this */
+    getCurrentDate() {
+        const date = new Date().toISOString().match(/(.*)T.*/);
+        return date[1];
+    }
+    /* eslint-enable class-methods-use-this */
+
+    async fetchDateForCurrentDay() {
+        return this.fetchDate(this.getCurrentDate());
+    }
+}
+
+const { url, path, query } = config.feedConfig;
+const api = new Api(url, path, query);
 
 module.exports = {
-    getCurrentDate,
-    fetchDate,
-    fetchDateForCurrentDay,
+    api,
 };

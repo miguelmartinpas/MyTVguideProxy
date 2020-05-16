@@ -2,8 +2,8 @@
 const express = require('express');
 const ExpressCache = require('express-cache-middleware');
 const cacheManager = require('cache-manager');
-const { checkAuthWithToken, checkWithEmailAndPassword } = require('./services/firebase');
-const broadcasting = require('./controllers/broadcasting');
+const { authMiddleware } = require('./middlewares/Auth');
+const { programmes } = require('./controllers/Programmes');
 
 const PORT = process.env.PORT || 3000;
 
@@ -24,26 +24,8 @@ app.listen(PORT, () => {
 });
 
 // mildeware to check auth
-app.use(async (req, res, next) => {
-    let isAuth = false;
-    const { token, user, pass } = req.headers;
-    if (req.headers.token) {
-        isAuth = await checkAuthWithToken(token);
-    } else if (req.headers.user && req.headers.pass) {
-        isAuth = await checkWithEmailAndPassword(user, pass);
-    }
-    if (!isAuth) {
-        res.status(401).json({ status: 401, error: 'Unauthorized' });
-    }
-    next();
-});
+app.use(authMiddleware.execute);
 
-// broadcasting
-// index
-app.get('/broadcasting', async (req, res) => {
-    res.json(await broadcasting.index());
-});
-// show(id)
-app.get('/broadcasting/:day', async (req, res) => {
-    res.json(await broadcasting.show(req.params.day));
-});
+// tv-programmes
+app.get('/tv-programmes', programmes.index);
+app.get('/tv-programmes/:day', programmes.show);

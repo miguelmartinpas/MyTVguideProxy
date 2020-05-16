@@ -1,3 +1,4 @@
+let feedConfig = require('./emptyFeedConfig.json');
 let firebaseConfig = require('./emptyFirebaseConfig.json');
 let serviceAccountKey = require('./emptyServiceAccountKey.json');
 
@@ -25,7 +26,14 @@ firebaseConfig = {
     appId: process.env.FIREBASE_APPID || firebaseConfig.appId,
 };
 
+feedConfig = {
+    url: process.env.FEED_URL || feedConfig.url,
+    path: process.env.FEED_PATH || feedConfig.path,
+    query: process.env.FEED_QUERY || feedConfig.query,
+};
+
 module.exports = {
     firebaseConfig,
     serviceAccountKey,
+    feedConfig,
 };
