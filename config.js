@@ -1,6 +1,7 @@
 let feedConfig = require('./emptyFeedConfig.json');
 let firebaseConfig = require('./emptyFirebaseConfig.json');
 let serviceAccountKey = require('./emptyServiceAccountKey.json');
+let hostConfig = require('./emptyHostConfig.json');
 
 serviceAccountKey = {
     type: process.env.FIREBASE_TYPE || serviceAccountKey.type,
@@ -32,8 +33,15 @@ feedConfig = {
     query: process.env.FEED_QUERY || feedConfig.query,
 };
 
+hostConfig = {
+    mode: process.env.HOST_MODE || hostConfig.mode,
+    host: process.env.HOST_URL || hostConfig.url,
+    port: process.env.HOST_PORT || hostConfig.port,
+};
+
 module.exports = {
     firebaseConfig,
     serviceAccountKey,
     feedConfig,
+    hostConfig,
 };

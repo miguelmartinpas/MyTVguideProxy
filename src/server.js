@@ -1,18 +1,12 @@
 // https://www.airpair.com/node.js/posts/top-10-mistakes-node-developers-make
 const express = require('express');
-const ExpressCache = require('express-cache-middleware');
-const cacheManager = require('cache-manager');
+const { cacheMiddleware } = require('./middlewares/caching');
 const { authMiddleware } = require('./middlewares/Auth');
+const { keepMeAlive } = require('./services/KeepMeAlive');
 const { programmes } = require('./controllers/Programmes');
+const config = require('../config');
 
 const PORT = process.env.PORT || 3000;
-
-const caching = cacheManager.caching({
-    store: 'memory',
-    max: 10000,
-    ttl: 3600,
-});
-const cacheMiddleware = new ExpressCache(caching);
 
 const app = express();
 cacheMiddleware.attach(app);
@@ -29,3 +23,6 @@ app.use(authMiddleware.execute);
 // tv-programmes
 app.get('/tv-programmes', programmes.index);
 app.get('/tv-programmes/:day', programmes.show);
+
+const { mode, host, port } = config.hostConfig;
+keepMeAlive.execute(mode, host, port);

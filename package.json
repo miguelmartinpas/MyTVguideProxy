@@ -2,8 +2,10 @@
   "name": "mytvguideproxy",
   "version": "1.0.0",
   "description": "",
+  "main": "./src/server.js",
   "scripts": {
-    "start": "nodemon --watch src ./src/server.js",
+    "start": "node ./src/server.js",
+    "start:watch": "nodemon --watch src ./src/server.js",
     "lint": "eslint 'src/**/*.{js,mjs}' --fix",
     "heroku:logs": "heroku logs -a my-tv-guide-proxy",
     "heroku:config": "heroku config -a my-tv-guide-proxy",
