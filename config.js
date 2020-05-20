@@ -1,7 +1,7 @@
-let feedConfig = require('./feedConfig.json');
-let firebaseConfig = require('./firebaseConfig.json');
-let serviceAccountKey = require('./serviceAccountKey.json');
-let hostConfig = require('./hostConfig.json');
+let feedConfig = require('./emptyFeedConfig.json');
+let firebaseConfig = require('./emptyFirebaseConfig.json');
+let serviceAccountKey = require('./emptyServiceAccountKey.json');
+let hostConfig = require('./emptyHostConfig.json');
 
 serviceAccountKey = {
     type: process.env.FIREBASE_TYPE || serviceAccountKey.type,
