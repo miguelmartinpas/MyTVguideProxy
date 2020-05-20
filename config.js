@@ -1,7 +1,7 @@
-let feedConfig = require('./emptyFeedConfig.json');
-let firebaseConfig = require('./emptyFirebaseConfig.json');
-let serviceAccountKey = require('./emptyServiceAccountKey.json');
-let hostConfig = require('./emptyHostConfig.json');
+let feedConfig = require('./feedConfig.json');
+let firebaseConfig = require('./firebaseConfig.json');
+let serviceAccountKey = require('./serviceAccountKey.json');
+let hostConfig = require('./hostConfig.json');
 
 serviceAccountKey = {
     type: process.env.FIREBASE_TYPE || serviceAccountKey.type,
@@ -38,6 +38,15 @@ hostConfig = {
     host: process.env.HOST_URL || hostConfig.url,
     port: process.env.HOST_PORT || hostConfig.port,
 };
+
+/* eslint-disable no-console */
+console.log('Config:', {
+    firebaseConfig,
+    serviceAccountKey,
+    feedConfig,
+    hostConfig,
+});
+/* eslint-enable no-console */
 
 module.exports = {
     firebaseConfig,

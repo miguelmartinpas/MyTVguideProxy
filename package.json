@@ -7,8 +7,12 @@
     "start": "node ./src/server.js",
     "start:watch": "nodemon --watch src ./src/server.js",
     "lint": "eslint 'src/**/*.{js,mjs}' --fix",
+    "install:heroku:cli": "brew tap heroku/brew && brew install heroku",
+    "heroku:login": "heroku login",
     "heroku:logs": "heroku logs -a my-tv-guide-proxy",
     "heroku:config": "heroku config -a my-tv-guide-proxy",
+    "install:ibmcloud:cli": "curl -sL https://ibm.biz/idt-installer | bash",
+    "bx:login": "bx login",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

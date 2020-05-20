@@ -2,9 +2,9 @@
 const express = require('express');
 const { cacheMiddleware } = require('./middlewares/caching');
 const { authMiddleware } = require('./middlewares/Auth');
-const { keepMeAlive } = require('./services/KeepMeAlive');
+// const { keepMeAlive } = require('./services/KeepMeAlive');
 const { programmes } = require('./controllers/Programmes');
-const config = require('../config');
+// const config = require('../config');
 
 const PORT = process.env.PORT || 3000;
 
@@ -24,5 +24,5 @@ app.use(authMiddleware.execute);
 app.get('/tv-programmes', programmes.index);
 app.get('/tv-programmes/:day', programmes.show);
 
-const { mode, host, port } = config.hostConfig;
-keepMeAlive.execute(mode, host, port);
+// const { mode, host, port } = config.hostConfig;
+// keepMeAlive.execute(mode, host, port);
