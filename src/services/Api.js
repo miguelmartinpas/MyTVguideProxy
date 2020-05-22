@@ -50,6 +50,13 @@ class Api {
     }
     /* eslint-enable class-methods-use-this */
 
+    /* eslint-disable class-methods-use-this */
+    getNextDay(day) {
+        const date = new Date(new Date(day).getTime() + 86400000).toISOString().match(/(.*)T.*/);
+        return date[1];
+    }
+    /* eslint-enable class-methods-use-this */
+
     async fetchDateForCurrentDay() {
         return this.fetchDate(this.getCurrentDate());
     }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/server.js",
   "engines" : {
-      "node": "> 6.0.0"
+      "node": "10.16.2"
   },
   "scripts": {
     "start": "node ./src/server.js",
@@ -16,7 +16,8 @@
     "heroku:config": "heroku config -a my-tv-guide-proxy",
     "install:ibmcloud:cli": "curl -sL https://ibm.biz/idt-installer | bash",
     "bx:login": "bx login",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "set:env": "source setEnv.sh"
   },
   "author": "",
   "license": "ISC",

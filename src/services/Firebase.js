@@ -10,13 +10,19 @@ class Firebase {
         this.firebaseApp = firebaseApp;
         this.firebaseAdmin = firebaseAdmin;
 
-        this.firebaseApp = firebaseApp.initializeApp(config.firebaseConfig);
-        this.firebaseAdmin.initializeApp({
-            credential: this.firebaseAdmin.credential.cert(config.serviceAccountKey),
-            databaseURL: config.serviceAccountKey.databaseURL,
-        });
-        this.db = firebaseApp.firestore();
-        this.collectionRefs = this.db.collection(PROGRAMS_COLLECTION);
+        try {
+            this.firebaseApp = firebaseApp.initializeApp(config.firebaseConfig);
+            this.firebaseAdmin.initializeApp({
+                credential: this.firebaseAdmin.credential.cert(config.serviceAccountKey),
+                databaseURL: config.serviceAccountKey.databaseURL,
+            });
+            this.db = firebaseApp.firestore();
+            this.collectionRefs = this.db.collection(PROGRAMS_COLLECTION);
+        } catch (error) {
+            /* eslint-disable no-console */
+            console.error(`FirebaseService Error: ${error.message}`);
+            /* eslint-enable no-console */
+        }
     }
 
     async checkWithEmailAndPassword(user, pass) {

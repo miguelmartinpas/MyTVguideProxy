@@ -3,3 +3,4 @@ firebaseConfig.json
 feedConfig.json
 hostConfig.json
 node_modules
+setEnv.sh
