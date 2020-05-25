@@ -4,3 +4,6 @@ feedConfig.json
 hostConfig.json
 node_modules
 setEnv.sh
+run.sh
+cf-build.sh
+cf-deploy.sh
