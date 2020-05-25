@@ -26,6 +26,7 @@ class Api {
                 /* eslint-enable no-console */
                 const programsFromFirebase = await firebase.getProgramsFor(day);
                 firebase.purgeProgramsBeforeTo(this.getPreviousDay(day));
+                this.preload(this.getNextDay(day));
                 return {
                     day: dateParsed[1],
                     stations,
@@ -77,20 +78,20 @@ class Api {
         if (dateParsed) {
             return new Promise((resolve, reject) => {
                 /* eslint-disable no-console */
-                console.log(`Load data from ${this.url}/${this.path}/${dateParsed[1]}${this.query} ...`);
+                console.log(`Load data from ${this.url}/${this.path}/${day}${this.query} ...`);
                 /* eslint-enable no-console */
-                fetch(`${this.url}/${this.path}/${dateParsed[1]}${this.query}`)
+                fetch(`${this.url}/${this.path}/${day}${this.query}`)
                     .then((response) => response.json())
                     .then((data) => {
                         firebase.writePrograms(day, parser.parseDataToPrograms(data.data));
-                        resolve({ day: dateParsed[1], stations, programs: parser.parseDataToPrograms(data.data) });
+                        resolve({ day, stations, programs: parser.parseDataToPrograms(data.data) });
                     })
                     .catch((error) => {
                         reject(error);
                     });
             });
         }
-        return { day: dateParsed[1], stations, programs: {} };
+        return { day, stations, programs: {} };
     }
 
     getCurrentDate() {
