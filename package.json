@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "./src/server.js",
-  "engines" : {
-      "node": "10.16.2"
+  "engines": {
+    "node": "10.16.2"
   },
   "scripts": {
     "run": "./run.sh",
     "start": "node ./src/server.js",
     "start:watch": "nodemon --watch src ./src/server.js",
+    "start:debug": "DEBUG=express:* npm start",
     "lint": "eslint 'src/**/*.{js,mjs}' --fix",
     "install:heroku:cli": "brew tap heroku/brew && brew install heroku",
     "heroku:login": "heroku login",
@@ -20,7 +21,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "set:env": "source setEnv.sh"
   },
-  "author": "",
+  "author": "Miguel Martin",
   "license": "ISC",
   "dependencies": {
     "cache-manager": "^3.3.0",

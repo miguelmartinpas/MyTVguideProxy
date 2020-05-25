@@ -8,6 +8,4 @@ const caching = cacheManager.caching({
 });
 const cacheMiddleware = new ExpressCache(caching);
 
-module.exports = {
-    cacheMiddleware,
-};
+module.exports = cacheMiddleware;

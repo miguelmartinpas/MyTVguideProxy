@@ -1,33 +1,25 @@
-// https://www.airpair.com/node.js/posts/top-10-mistakes-node-developers-make
 const express = require('express');
-const { cacheMiddleware } = require('./middlewares/caching');
-const { authMiddleware } = require('./middlewares/Auth');
-const { keepMeAlive } = require('./services/KeepMeAlive');
-const { programmes } = require('./controllers/Programmes');
 const config = require('../config');
-
-const PORT = process.env.PORT || 3000;
+const cacheMiddleware = require('./middlewares/caching');
+const authMiddleware = require('./middlewares/Auth');
+const programmesRouter = require('./routes/programmes');
+const purgeRouter = require('./routes/purge');
+const preloadRouter = require('./routes/preload');
+const statusRouter = require('./routes/status');
 
 const app = express();
-cacheMiddleware.attach(app);
-
-app.listen(PORT, () => {
+app.listen(config.globalConfig.port, () => {
     /* eslint-disable no-console */
-    console.info('Server started in port 3000');
+    console.info(`Server started in port ${config.globalConfig.port}`);
     /* eslint-enable no-console */
 });
 
-// mildeware to check auth
+// midleware cache + check auth
+cacheMiddleware.attach(app);
 app.use(authMiddleware.execute);
 
-// tv-programmes
-app.get('/tv-programmes', programmes.index);
-app.get('/tv-programmes/:day', programmes.show);
-
-if (config.globalConfig.useKeepMeAlive) {
-    /* eslint-disable no-console */
-    console.info('Using "keep me alive" utility');
-    /* eslint-enable no-console */
-    const { mode, host, port } = config.hostConfig;
-    keepMeAlive.execute(mode, host, port);
-}
+// routes
+app.use('/tv-programmes', programmesRouter);
+app.use('/purge', purgeRouter);
+app.use('/preload', preloadRouter);
+app.use('/status', statusRouter);

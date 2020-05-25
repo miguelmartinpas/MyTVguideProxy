@@ -32,6 +32,4 @@ class Auth {
     /* eslint-enable class-methods-use-this */
 }
 
-module.exports = {
-    authMiddleware: new Auth(),
-};
+module.exports = new Auth();

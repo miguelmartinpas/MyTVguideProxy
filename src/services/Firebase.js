@@ -85,6 +85,21 @@ class Firebase {
         }
     }
 
+    async getExistedPrograms() {
+        const programs = [];
+        try {
+            const querySnapshot = await this.collectionRefs.get();
+            querySnapshot.forEach((doc) => {
+                programs.push(doc.id);
+            });
+        } catch (error) {
+            /* eslint-disable no-console */
+            console.error('getExistedPrograms Error', error.message);
+            /* eslint-enable no-console */
+        }
+        return programs;
+    }
+
     async getProgramsFor(day) {
         try {
             const doc = await this.collectionRefs.doc(day).get();

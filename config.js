@@ -1,7 +1,7 @@
-let feedConfig = require('./emptyFeedConfig.json');
-let firebaseConfig = require('./emptyFirebaseConfig.json');
-let serviceAccountKey = require('./emptyServiceAccountKey.json');
-let hostConfig = require('./emptyHostConfig.json');
+let feedConfig = require('./config/emptyFeedConfig.json');
+let firebaseConfig = require('./config/emptyFirebaseConfig.json');
+let serviceAccountKey = require('./config/emptyServiceAccountKey.json');
+let hostConfig = require('./config/emptyHostConfig.json');
 
 let errorInConfig = false;
 
@@ -79,6 +79,7 @@ Object.keys(hostConfig)
 
 const globalConfig = {
     useKeepMeAlive: process.env.USE_KEEP_ME_ALIVE || false,
+    port: process.env.PORT || 3000,
 };
 
 module.exports = {
