@@ -1,6 +1,6 @@
-[![Build]](https://img.shields.io/badge/Build-pasing-brightgreen.svg)]
+[![Build](https://img.shields.io/badge/Build-pasing-brightgreen.svg)]
 [![Node version](https://img.shields.io/badge/node-10.16.2-brightgreen.svg)](http://nodejs.org/download/)
-[![License]](https://img.shields.io/badge/License-GPL%20v3-blue.svg)]
+[![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)]
 
 # MyTVGuideProxy
 
