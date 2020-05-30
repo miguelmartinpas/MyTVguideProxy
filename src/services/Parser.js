@@ -44,4 +44,5 @@ class Parser {
 
 module.exports = {
     parser: new Parser(),
+    ParserService: Parser,
 };

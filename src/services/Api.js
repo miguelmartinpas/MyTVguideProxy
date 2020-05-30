@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const config = require('../../config');
 const stations = require('./stations.json');
 const { parser } = require('./Parser');
-const { firebase } = require('./Firebase');
+const { firebaseInstance } = require('./Firebase');
 
 class Api {
     constructor(url, path, query) {
@@ -17,15 +17,15 @@ class Api {
 
     async fetchDate(day) {
         const startTime = new Date();
-        const dateParsed = day.match(this.dateFormat);
+        const dateParsed = this.isValidDate(day) && day.match(this.dateFormat);
         if (dateParsed) {
-            const getProgramsforDay = await firebase.existsProgramsFor(day);
+            const getProgramsforDay = await firebaseInstance.existsProgramsFor(day);
             if (getProgramsforDay) {
                 /* eslint-disable no-console */
                 console.log(`Load data from Cloud Firestore ...`);
                 /* eslint-enable no-console */
-                const programsFromFirebase = await firebase.getProgramsFor(day);
-                firebase.purgeProgramsBeforeTo(this.getPreviousDay(day));
+                const programsFromFirebase = await firebaseInstance.getProgramsFor(day);
+                firebaseInstance.purgeProgramsBeforeTo(this.getPreviousDay(day));
                 this.preload(this.getNextDay(day));
                 return {
                     day: dateParsed[1],
@@ -40,6 +40,10 @@ class Api {
         throw new Error(`Error Incorrect format of date '${day}'. the correct forma is ${this.dateFormat}`);
     }
 
+    async fetchDateForCurrentDay() {
+        return this.fetchDate(this.getCurrentDate());
+    }
+
     async purge(day) {
         const currentDate = day || this.getCurrentDate();
         const startTime = new Date();
@@ -47,7 +51,7 @@ class Api {
             /* eslint-disable no-console */
             console.log(`Purge data before to "${currentDate}" ...`);
             /* eslint-enable no-console */
-            await firebase.purgeProgramsBeforeTo(currentDate);
+            await firebaseInstance.purgeProgramsBeforeTo(currentDate);
             return { day: currentDate, purge: 'success', time: `${(new Date() - startTime) / 1000} milliseconds` };
         } catch (error) {
             /* eslint-disable no-console */
@@ -61,7 +65,7 @@ class Api {
         const startTime = new Date();
         const selectedDay = day || this.getCurrentDate();
         let type = 'exist';
-        const getProgramsforDay = await firebase.existsProgramsFor(selectedDay);
+        const getProgramsforDay = await firebaseInstance.existsProgramsFor(selectedDay);
         /* eslint-disable no-console */
         console.log(`Preload data for ${selectedDay} (${day}) ...`);
         /* eslint-enable no-console */
@@ -69,12 +73,12 @@ class Api {
             await this.loadData(selectedDay);
             type = 'loaded';
         }
-        const programs = await firebase.getExistedPrograms();
+        const programs = await firebaseInstance.getExistedPrograms();
         return { status: 'success', type, programs, time: `${(new Date() - startTime) / 1000} milliseconds` };
     }
 
     async loadData(day) {
-        const dateParsed = day.match(this.dateFormat);
+        const dateParsed = this.isValidDate(day) && day.match(this.dateFormat);
         if (dateParsed) {
             return new Promise((resolve, reject) => {
                 /* eslint-disable no-console */
@@ -83,7 +87,7 @@ class Api {
                 fetch(`${this.url}/${this.path}/${day}${this.query}`)
                     .then((response) => response.json())
                     .then((data) => {
-                        firebase.writePrograms(day, parser.parseDataToPrograms(data.data));
+                        firebaseInstance.writePrograms(day, parser.parseDataToPrograms(data.data));
                         resolve({ day, stations, programs: parser.parseDataToPrograms(data.data) });
                     })
                     .catch((error) => {
@@ -91,7 +95,7 @@ class Api {
                     });
             });
         }
-        return { day, stations, programs: {} };
+        return { day, stations: {}, programs: {} };
     }
 
     getCurrentDate() {
@@ -109,14 +113,19 @@ class Api {
         return date[1];
     }
 
-    async fetchDateForCurrentDay() {
-        return this.fetchDate(this.getCurrentDate());
+    /* eslint-disable class-methods-use-this */
+    isValidDate(day) {
+        const date = new Date(day);
+        /* eslint-disable no-restricted-globals */
+        return date instanceof Date && !isNaN(date);
+        /* eslint-enable no-restricted-globals */
     }
+    /* eslint-enable class-methods-use-this */
 }
 
 const { url, path, query } = config.feedConfig;
-const api = new Api(url, path, query);
 
 module.exports = {
-    api,
+    apiInstance: new Api(url, path, query),
+    ApiService: Api,
 };

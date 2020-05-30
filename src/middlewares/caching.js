@@ -1,10 +1,11 @@
 const ExpressCache = require('express-cache-middleware');
 const cacheManager = require('cache-manager');
+const config = require('../../config');
 
 const caching = cacheManager.caching({
-    store: 'memory',
-    max: 10000,
-    ttl: 3600,
+    store: config.globalConfig.cacheStore,
+    max: config.globalConfig.cacheMax,
+    ttl: config.globalConfig.cacheTtl,
 });
 const cacheMiddleware = new ExpressCache(caching);
 

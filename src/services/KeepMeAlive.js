@@ -41,16 +41,17 @@ class KeepMeAlive {
     }
 }
 
-const keepMeAlive = new KeepMeAlive();
+const keepMeAliveInstance = new KeepMeAlive();
 
 if (config.globalConfig.useKeepMeAlive) {
     /* eslint-disable no-console */
     console.info('Using "keep me alive" utility');
     /* eslint-enable no-console */
     const { mode, host, port } = config.hostConfig;
-    keepMeAlive.execute(mode, host, port);
+    keepMeAliveInstance.execute(mode, host, port);
 }
 
 module.exports = {
-    keepMeAlive,
+    keepMeAliveInstance,
+    KeepMeAliveService: KeepMeAlive,
 };

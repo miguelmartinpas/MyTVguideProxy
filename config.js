@@ -80,6 +80,9 @@ Object.keys(hostConfig)
 const globalConfig = {
     useKeepMeAlive: process.env.USE_KEEP_ME_ALIVE || false,
     port: process.env.PORT || 3000,
+    cacheStore: process.env.CACHE_STORE || 'memory',
+    cacheMax: process.env.CACHE_MAX || 10000,
+    cacheTtl: process.env.CACHE_TTL || 3600,
 };
 
 module.exports = {

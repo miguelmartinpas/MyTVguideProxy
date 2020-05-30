@@ -1,11 +1,11 @@
-const { api } = require('../services/Api');
+const { apiInstance } = require('../services/Api');
 
 class Preload {
     /* eslint-disable class-methods-use-this */
     async index(req, res) {
         let data = {};
         try {
-            data = await api.preload();
+            data = await apiInstance.preload();
         } catch (error) {
             data = { error: error.message };
         }
@@ -18,7 +18,7 @@ class Preload {
         let data = {};
         const { day } = req.params;
         try {
-            data = await api.preload(day);
+            data = await apiInstance.preload(day);
         } catch (error) {
             data = { error: error.message };
         }

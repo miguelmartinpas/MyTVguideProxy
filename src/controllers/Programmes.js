@@ -1,24 +1,24 @@
-const { api } = require('../services/Api');
+const { apiInstance } = require('../services/Api');
 
 class Programmes {
     /* eslint-disable class-methods-use-this */
     async index(req, res) {
         let data = {};
         try {
-            data = await api.fetchDateForCurrentDay();
+            data = await apiInstance.fetchDateForCurrentDay();
         } catch (error) {
             data = { error: error.message };
         }
         return res.json(data);
     }
-    /* eslint-disable class-methods-use-this */
+    /* eslint-enable class-methods-use-this */
 
     /* eslint-disable class-methods-use-this */
     async show(req, res) {
         let data = {};
         const { day } = req.params;
         try {
-            data = await api.fetchDate(day);
+            data = await apiInstance.fetchDate(day);
         } catch (error) {
             data = { error: error.message };
         }

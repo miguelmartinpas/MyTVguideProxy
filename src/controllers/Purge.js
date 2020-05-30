@@ -1,11 +1,11 @@
-const { api } = require('../services/Api');
+const { apiInstance } = require('../services/Api');
 
 class Purge {
     /* eslint-disable class-methods-use-this */
     async index(req, res) {
         let data = {};
         try {
-            data = await api.purge();
+            data = await apiInstance.purge();
         } catch (error) {
             data = { error: error.message };
         }
@@ -18,7 +18,7 @@ class Purge {
         let data = {};
         const { day } = req.params;
         try {
-            data = await api.purge(day);
+            data = await apiInstance.purge(day);
         } catch (error) {
             data = { error: error.message };
         }

@@ -12,7 +12,7 @@ class Status {
                 /* eslint-disable no-console */
                 console.log(`calling to '${callback}' ...`);
                 /* eslint-enable no-console */
-                fetch(`${callback}?time=${new Date().toString()}`);
+                fetch(`${callback}?time=${new Date().toISOString()}`);
             }, timeinseconds * 1000);
         }
         return res.json({ status: 'ok' });

@@ -2,14 +2,14 @@
   "name": "mytvguideproxy",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/server.js",
+  "main": "./server.js",
   "engines": {
     "node": "10.16.2"
   },
   "scripts": {
     "run": "./run.sh",
-    "start": "node ./src/server.js",
-    "start:watch": "nodemon --watch src ./src/server.js",
+    "start": "node ./server.js",
+    "start:watch": "nodemon --watch src ./server.js",
     "start:debug": "DEBUG=express:* npm start",
     "lint": "eslint 'src/**/*.{js,mjs}' --fix",
     "install:heroku:cli": "brew tap heroku/brew && brew install heroku",
@@ -18,7 +18,9 @@
     "heroku:config": "heroku config -a my-tv-guide-proxy",
     "install:ibmcloud:cli": "curl -sL https://ibm.biz/idt-installer | bash",
     "bx:login": "bx login",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --silent --coverage=false --config=jest.config.js",
+    "test:verbose": "jest --coverage=false --config=jest.config.js",
+    "test:coverage": "jest --silent --config=jest.config.js",
     "set:env": "source setEnv.sh"
   },
   "author": "Miguel Martin",
@@ -38,6 +40,10 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-prettier": "^3.1.3",
-    "prettier": "^2.0.5"
+    "jest": "^26.0.1",
+    "jest-date-mock": "^1.0.8",
+    "nock": "^12.0.3",
+    "prettier": "^2.0.5",
+    "supertest": "^4.0.2"
   }
 }

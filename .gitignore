@@ -7,3 +7,5 @@ setEnv.sh
 run.sh
 cf-build.sh
 cf-deploy.sh
+
+test/*

@@ -1,4 +1,4 @@
-const { firebase } = require('../services/Firebase');
+const { firebaseInstance } = require('../services/Firebase');
 const config = require('../../config');
 
 class Auth {
@@ -14,9 +14,9 @@ class Auth {
             let isAuth = false;
             const { token, user, pass } = req.headers;
             if (token) {
-                isAuth = await firebase.checkAuthWithToken(token);
+                isAuth = await firebaseInstance.checkAuthWithToken(token);
             } else if (user && pass) {
-                isAuth = await firebase.checkWithEmailAndPassword(user, pass);
+                isAuth = await firebaseInstance.checkWithEmailAndPassword(user, pass);
             }
             if (!isAuth) {
                 res.status(401).json({ status: 401, error: 'Unauthorized' });

@@ -114,12 +114,6 @@ class Firebase {
 
     async writePrograms(day, programs) {
         try {
-            // const allowedStations = ['TVE', 'LA2', 'A3'];
-            // const filteredStations = allowedStations.reduce((acc, current) => {
-            //     acc[current] = programs[current];
-            //     return acc;
-            // }, {});
-            // this.collectionRefs.doc(day).set({ ...filteredStations });
             this.collectionRefs.doc(day).set({ ...programs });
         } catch (error) {
             /* eslint-disable no-console */
@@ -130,5 +124,6 @@ class Firebase {
 }
 
 module.exports = {
-    firebase: new Firebase(firebase, admin, firebaseConfig),
+    firebaseInstance: new Firebase(firebase, admin, firebaseConfig),
+    FirebaseService: Firebase,
 };
