@@ -16,3 +16,14 @@ API to get Spanish TV guide
 * You need to add user and password to header to get results
 
 There are routes to preload data and purge old one
+
+
+## Continous integration
+
+### Build / Unit Test
+
+* https://travis-ci.com/github/miguelmartinpas/MyTVguideProxy
+
+### Test Coverage
+
+* https://coveralls.io/github/miguelmartinpas/MyTVguideProxy
