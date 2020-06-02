@@ -19,18 +19,19 @@ jest.mock('../services/Firebase', () => ({
     },
 }));
 
-const mockConfig = jest.fn(() => ({
-    errorInConfig: true,
-}));
-jest.mock('../../config', () => () => mockConfig());
+jest.mock('../../config');
+const config = require('../../config');
 
 describe('Auth middleware', () => {
+    beforeEach(() => {
+        config.errorInConfig = false;
+    });
+
     afterEach(() => {
         mockJson.mockClear();
         mockNext.mockClear();
         mockCheckAuthWithToken.mockClear();
         mockCheckWithEmailAndPassword.mockClear();
-        mockConfig.mockClear();
     });
 
     describe('execute method', () => {
@@ -39,22 +40,17 @@ describe('Auth middleware', () => {
         });
 
         it('WHEN execute is used with incorrect config THEN throw error', async () => {
+            config.errorInConfig = true;
             auth.execute({}, res, mockNext);
             expect(mockJson).toHaveBeenCalledWith({ error: 'Internal error', status: 500 });
         });
 
         it('WHEN execute is used with correct config but incorrect header THEN throw error', async () => {
-            mockConfig.mockImplementation(() => ({
-                errorInConfig: false,
-            }));
             auth.execute({}, res, mockNext);
             expect(mockJson).toHaveBeenCalledWith({ error: 'Internal error', status: 500 });
         });
 
         it('WHEN execute is used with correct config header THEN return Unauthorized is auth is denied', async () => {
-            mockConfig.mockImplementation(() => ({
-                errorInConfig: false,
-            }));
             mockCheckAuthWithToken.mockImplementation(() => false);
             await auth.execute(
                 {
@@ -70,10 +66,7 @@ describe('Auth middleware', () => {
             expect(mockNext).toHaveBeenCalled();
         });
 
-        it('WHEN execute is used with correct config header THEN nex is called', async () => {
-            mockConfig.mockImplementation(() => ({
-                errorInConfig: false,
-            }));
+        it('WHEN execute is used with correct config header and correct param THEN nex is called', async () => {
             mockCheckAuthWithToken.mockImplementation(() => true);
             await auth.execute(
                 {
@@ -86,6 +79,39 @@ describe('Auth middleware', () => {
             );
             expect(mockCheckAuthWithToken).toHaveBeenCalledWith('foo');
             expect(mockJson).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalled();
+        });
+
+        it('WHEN execute is used with correct config header and correct param THEN nex is called', async () => {
+            mockCheckWithEmailAndPassword.mockImplementation(() => true);
+            await auth.execute(
+                {
+                    headers: {
+                        user: 'foo',
+                        pass: 'bar',
+                    },
+                },
+                res,
+                mockNext
+            );
+            expect(mockCheckWithEmailAndPassword).toHaveBeenCalledWith('foo', 'bar');
+            expect(mockJson).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalled();
+        });
+
+        it('WHEN execute is used with correct config header and incorrect param THEN nex is called', async () => {
+            mockCheckWithEmailAndPassword.mockImplementation(() => true);
+            await auth.execute(
+                {
+                    headers: {
+                        user: 'foo',
+                    },
+                },
+                res,
+                mockNext
+            );
+            expect(mockCheckWithEmailAndPassword).not.toHaveBeenCalled();
+            expect(mockJson).toHaveBeenCalled();
             expect(mockNext).toHaveBeenCalled();
         });
     });
