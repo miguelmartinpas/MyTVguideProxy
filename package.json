@@ -21,6 +21,7 @@
     "test": "jest --silent --coverage=false --config=jest.config.js",
     "test:verbose": "jest --coverage=false --config=jest.config.js",
     "test:coverage": "jest --silent --config=jest.config.js",
+    "coverage": "npm run test:coverage && cat ./test/results/coverage/jest/lcov.info | coveralls",
     "set:env": "source setEnv.sh"
   },
   "author": "Miguel Martin",
@@ -35,6 +36,7 @@
     "nodemon": "^2.0.3"
   },
   "devDependencies": {
+    "coveralls": "^3.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
