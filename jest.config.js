@@ -3,7 +3,7 @@ module.exports = {
     notify: true,
     collectCoverage: true,
     coverageDirectory: 'test/results/coverage/jest',
-    coverageReporters: ['html', 'text-summary'],
+    coverageReporters: ['html', 'text-summary', 'lcov'],
     coverageThreshold: {
         global: {
             statements: 80,
