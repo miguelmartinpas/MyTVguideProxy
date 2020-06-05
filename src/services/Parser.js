@@ -30,9 +30,9 @@ class Parser {
     }
     /* eslint-enable class-methods-use-this */
 
-    parseDataToPrograms(data) {
+    parseDataToPrograms(data = {}) {
         const programs = Object.keys(data).reduce((acc, mainCode) => {
-            if (data[mainCode] && data[mainCode][stationKey] && data[mainCode][stationKey][stationCode]) {
+            if (data[mainCode][stationKey] && data[mainCode][stationKey][stationCode]) {
                 const code = data[mainCode][stationKey][stationCode];
                 acc[code] = this.parsePrograms(data[mainCode][programKey]);
             }
