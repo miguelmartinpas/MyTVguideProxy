@@ -9,6 +9,7 @@ class Firebase {
     constructor(firebaseApp, firebaseAdmin, config) {
         this.firebaseApp = firebaseApp;
         this.firebaseAdmin = firebaseAdmin;
+        this.firebaseError = null;
 
         try {
             this.firebaseApp = firebaseApp.initializeApp(config.firebaseConfig);
@@ -21,6 +22,7 @@ class Firebase {
         } catch (error) {
             /* eslint-disable no-console */
             console.error(`FirebaseService Error: ${error.message}`);
+            this.firebaseError = error.message;
             /* eslint-enable no-console */
         }
     }
@@ -70,7 +72,9 @@ class Firebase {
             /* eslint-disable no-console */
             console.error('purgeProgramsBeforeTo Error', error.message);
             /* eslint-enable no-console */
+            return false;
         }
+        return true;
     }
 
     async existsProgramsFor(day) {

@@ -8,7 +8,7 @@ jest.mock('../controllers/Purge', () => ({
 }));
 
 describe('Purge route', () => {
-    test('WHEN route is imported THEN It is defined', () => {
+    it('WHEN route is imported THEN It is defined', () => {
         expect(router).toBeDefined();
     });
 });

@@ -9,3 +9,4 @@ cf-build.sh
 cf-deploy.sh
 
 test/*
+test/**/*
