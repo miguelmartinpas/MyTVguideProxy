@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const config = require('../../config');
+// const config = require('../../config');
 
 const MINUTES = 29 * 60;
 const TIME_TO_REPEAT = MINUTES * 1000;
@@ -43,13 +43,13 @@ class KeepMeAlive {
 
 const keepMeAliveInstance = new KeepMeAlive();
 
-if (config.globalConfig.useKeepMeAlive) {
-    /* eslint-disable no-console */
-    console.info('Using "keep me alive" utility');
-    /* eslint-enable no-console */
-    const { mode, host, port } = config.hostConfig;
-    keepMeAliveInstance.execute(mode, host, port);
-}
+// if (config.globalConfig.useKeepMeAlive) {
+//     /* eslint-disable no-console */
+//     console.info('Using "keep me alive" utility');
+//     /* eslint-enable no-console */
+//     const { mode, host, port } = config.hostConfig;
+//     keepMeAliveInstance.execute(mode, host, port);
+// }
 
 module.exports = {
     keepMeAliveInstance,
