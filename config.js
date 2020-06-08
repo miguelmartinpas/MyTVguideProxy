@@ -86,10 +86,10 @@ const globalConfig = {
 };
 
 module.exports = {
+    errorInConfig,
     firebaseConfig,
     serviceAccountKey,
     feedConfig,
     hostConfig,
     globalConfig,
-    errorInConfig,
 };

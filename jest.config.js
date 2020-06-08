@@ -18,5 +18,5 @@ module.exports = {
     },
     testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
     coveragePathIgnorePatterns: ['/node_modules/', '/jest', 'config.js'],
-    setupFiles: ['./jest/global.js', 'jest-date-mock'],
+    setupFiles: ['jest-date-mock'],
 };

@@ -18,9 +18,9 @@
     "heroku:config": "heroku config -a my-tv-guide-proxy",
     "install:ibmcloud:cli": "curl -sL https://ibm.biz/idt-installer | bash",
     "bx:login": "bx login",
-    "test": "jest --silent --coverage=false --config=jest.config.js",
-    "test:verbose": "jest --coverage=false --config=jest.config.js",
-    "test:coverage": "jest --silent --config=jest.config.js",
+    "test": "jest --detectOpenHandles --silent --coverage=false --config=jest.config.js",
+    "test:verbose": "jest --detectOpenHandles --coverage=false --config=jest.config.js",
+    "test:coverage": "jest --detectOpenHandles --silent --config=jest.config.js",
     "coverage": "npm run test:coverage && cat ./test/results/coverage/jest/lcov.info | coveralls",
     "set:env": "source setEnv.sh"
   },

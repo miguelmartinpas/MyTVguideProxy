@@ -8,7 +8,6 @@
     "extends": [
         "airbnb-base",
         "prettier"
-
     ],
     "plugins": [
         "prettier"
