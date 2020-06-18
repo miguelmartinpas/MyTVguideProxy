@@ -61,10 +61,26 @@ class Firebase {
     }
 
     async purgeProgramsBeforeTo(day) {
+        /* eslint-disable no-console */
+        console.error('try purgeProgramsBeforeTo before to', day);
+        /* eslint-enable no-console */
         try {
             const querySnapshot = await this.collectionRefs.get();
             querySnapshot.forEach((doc) => {
+                /* eslint-disable no-console */
+                console.error(
+                    'is',
+                    doc.id,
+                    'before to',
+                    day,
+                    '?...',
+                    new Date(day) - new Date(doc.id) > 0 ? 'YES' : 'NO'
+                );
+                /* eslint-enable no-console */
                 if (new Date(day) - new Date(doc.id) > 0) {
+                    /* eslint-disable no-console */
+                    console.error('deleting ', doc.id, '...');
+                    /* eslint-enable no-console */
                     this.deletePrograms(doc.id);
                 }
             });
@@ -101,6 +117,9 @@ class Firebase {
             console.error('getExistedPrograms Error', error.message);
             /* eslint-enable no-console */
         }
+        /* eslint-disable no-console */
+        console.error('getExistedPrograms: ', programs);
+        /* eslint-enable no-console */
         return programs;
     }
 

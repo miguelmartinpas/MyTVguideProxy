@@ -9,7 +9,7 @@
   "scripts": {
     "run": "./run.sh",
     "start": "node ./server.js",
-    "start:watch": "nodemon --watch src ./server.js",
+    "start:watch": "source setEnv.sh && nodemon --watch src ./server.js",
     "start:debug": "DEBUG=express:* npm start",
     "lint": "eslint 'src/**/*.{js,mjs}' --fix",
     "install:heroku:cli": "brew tap heroku/brew && brew install heroku",
